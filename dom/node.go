@@ -7,20 +7,28 @@ const (
 	Element
 )
 
-type DomNode interface {
-	GetChildren() []DomNode
+type Node interface {
+	GetChildren() []Node
 	GetType() NodeType
 }
 
 type SimpleDomNode struct {
-	children []DomNode
+	children []Node
 	kind NodeType
 }
 
-func (s *SimpleDomNode) GetChildren() []DomNode {
+func (s *SimpleDomNode) GetChildren() []Node {
 	return s.children
 }
 
 func (s *SimpleDomNode) GetType() NodeType {
 	return s.kind
+}
+
+func (s *SimpleDomNode) SetChildren(children []Node) {
+	s.children = children
+}
+
+func (s *SimpleDomNode) SetKind(kind NodeType) {
+	s.kind = kind
 }

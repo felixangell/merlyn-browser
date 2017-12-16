@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/felixangell/merlyn/html"
+	"github.com/felixangell/merlyn/dom"
 	"io/ioutil"
 )
 
@@ -14,5 +15,6 @@ func main() {
         fmt.Print(err)
     }
     
-    html.ParseHtml(string(fileBytes))
+    htmlDOM := html.ParseHtml(string(fileBytes))
+	dom.TreePrinter(htmlDOM)
 }
