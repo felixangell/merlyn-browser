@@ -20,17 +20,17 @@ func (a AttributeMap) Info() string {
 type ElementNode struct {
 	SimpleDomNode
 	attributes AttributeMap
-	name string
+	name       string
 }
 
 func NewElementNode(name string, attributes AttributeMap) *ElementNode {
-	return &ElementNode {
-		SimpleDomNode: SimpleDomNode {
-			kind: Element,
+	return &ElementNode{
+		SimpleDomNode: SimpleDomNode{
+			kind:     Element,
 			children: []Node{},
 		},
 		attributes: attributes,
-		name: name,
+		name:       name,
 	}
 }
 

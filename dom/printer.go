@@ -5,8 +5,8 @@ import "fmt"
 const TAB_SIZE = 2
 
 func printNodes(nodes []Node, level int) {
-	paddingRaw := []byte{'>'}	
-	for idx := 1; idx < level * TAB_SIZE; idx++ {
+	paddingRaw := []byte{'>'}
+	for idx := 1; idx < level*TAB_SIZE; idx++ {
 		paddingRaw = append(paddingRaw, ' ')
 	}
 	padding := string(paddingRaw)
@@ -17,7 +17,7 @@ func printNodes(nodes []Node, level int) {
 			fmt.Println(padding, n.Info())
 		case *ElementNode:
 			fmt.Println(padding, n.Info())
-			printNodes(n.children, level + 1)
+			printNodes(n.children, level+1)
 		default:
 			fmt.Println("what is this?")
 		}
@@ -26,4 +26,4 @@ func printNodes(nodes []Node, level int) {
 
 func TreePrinter(nodes []Node) {
 	printNodes(nodes, 0)
-} 
+}

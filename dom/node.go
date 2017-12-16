@@ -15,7 +15,7 @@ type Node interface {
 
 type SimpleDomNode struct {
 	children []Node
-	kind NodeType
+	kind     NodeType
 }
 
 func (s *SimpleDomNode) GetChildren() []Node {

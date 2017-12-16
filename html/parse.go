@@ -3,14 +3,14 @@ package html
 import (
 	"fmt"
 	"github.com/felixangell/merlyn/dom"
-	"unicode/utf8"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 type HtmlParser struct {
 	input string
-	pos uint
+	pos   uint
 }
 
 func ParseHtml(htmlCode string) []dom.Node {
@@ -24,8 +24,8 @@ func ParseHtml(htmlCode string) []dom.Node {
 func (p *HtmlParser) parseNodes() []dom.Node {
 	var nodes []dom.Node
 	for {
-		p.consumeWhile(func (r rune) bool {
-			return r <= ' '	
+		p.consumeWhile(func(r rune) bool {
+			return r <= ' '
 		})
 
 		if !p.hasNext() || strings.HasPrefix(p.input[p.pos:], "</") {
@@ -44,7 +44,7 @@ func (p *HtmlParser) hasNext() bool {
 }
 
 func (p *HtmlParser) consumeWhile(predicate func(rune) bool) []rune {
-	// we can either slice here or we 
+	// we can either slice here or we
 	// can append it to a temporary buffer
 	// thing. for now we will append it to
 	// a buffer because it's a lot easier!
@@ -65,7 +65,7 @@ func (p *HtmlParser) expect(r ...rune) {
 	for _, expected := range r {
 		if p.hasNext() && p.peek(0) != expected {
 			var offs uint = 10
-			sample := p.input[p.pos:p.pos + offs]
+			sample := p.input[p.pos : p.pos+offs]
 			panic("expected '" + string(r) + "', got '" + string(sample) + "'")
 		}
 		p.consume()
@@ -117,13 +117,13 @@ func (p *HtmlParser) parseElement() *dom.ElementNode {
 			break
 		}
 
-		// this means that 
+		// this means that
 		// <div this is my thingy    ="foo">
 		// would be a valid attribute...
 		// stored as "this is my thingy    "
 		// should we allow this?
 
-		attributeName := p.consumeWhile(func (r rune) bool {
+		attributeName := p.consumeWhile(func(r rune) bool {
 			return r != '='
 		})
 		p.expect('=')
@@ -141,7 +141,7 @@ func (p *HtmlParser) parseElement() *dom.ElementNode {
 	}
 
 	p.expect('>')
-	
+
 	ele.SetChildren(p.parseNodes())
 
 	p.expect('<')
@@ -154,7 +154,7 @@ func (p *HtmlParser) parseElement() *dom.ElementNode {
 
 func (p *HtmlParser) parseText() *dom.TextNode {
 	value := p.consumeWhile(func(r rune) bool {
-		return r != '<'		
+		return r != '<'
 	})
 	return dom.NewTextNode(string(value))
 }
