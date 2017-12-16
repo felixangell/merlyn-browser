@@ -109,11 +109,11 @@ func (p *HtmlParser) parseString() string {
 func (p *HtmlParser) parseElement() *dom.ElementNode {
 	p.expect('<')
 	name := p.consumeWhile(IsHtmlTagRune)
-	
 	attribs := dom.AttributeMap{}
+	ele := dom.NewElementNode(string(name), attribs)
 	for {
 		p.consumeWhile(func(r rune) bool { return r <= ' ' })
-		if p.peek(0) == '>' {
+		if !p.hasNext() || p.peek(0) == '>' || strings.HasPrefix(p.input[p.pos:], "/>") {
 			break
 		}
 
@@ -131,16 +131,25 @@ func (p *HtmlParser) parseElement() *dom.ElementNode {
 		attribs[string(attributeName)] = attributeValue
 	}
 
+	// self closing tags, i.e.
+	// <link/>
+	// or <img/>
+	if p.peek(0) == '/' {
+		p.consume()
+		p.expect('>')
+		return ele
+	}
+
 	p.expect('>')
 	
-	children := p.parseNodes()
+	ele.SetChildren(p.parseNodes())
 
 	p.expect('<')
 	p.expect('/')
 	p.expect(name...)
 	p.expect('>')
 
-	return dom.NewElementNode(string(name), children, attribs)
+	return ele
 }
 
 func (p *HtmlParser) parseText() *dom.TextNode {

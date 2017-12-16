@@ -23,11 +23,11 @@ type ElementNode struct {
 	name string
 }
 
-func NewElementNode(name string, children []Node, attributes AttributeMap) *ElementNode {
+func NewElementNode(name string, attributes AttributeMap) *ElementNode {
 	return &ElementNode {
 		SimpleDomNode: SimpleDomNode {
 			kind: Element,
-			children: children,
+			children: []Node{},
 		},
 		attributes: attributes,
 		name: name,
