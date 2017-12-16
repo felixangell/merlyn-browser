@@ -10,6 +10,7 @@ const (
 type Node interface {
 	GetChildren() []Node
 	GetType() NodeType
+	Info() string
 }
 
 type SimpleDomNode struct {

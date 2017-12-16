@@ -5,6 +5,7 @@ import (
 	"github.com/felixangell/merlyn/dom"
 	"unicode/utf8"
 	"strings"
+	"unicode"
 )
 
 type HtmlParser struct {
@@ -90,17 +91,46 @@ func (p *HtmlParser) peek(offs uint) rune {
 }
 
 func IsHtmlTagRune(r rune) bool {
-	// apparently HTML lets you have
-	// any old shit in here!
-	// <!DOCTYPE html>
-	// start with a !
-	// has a space in it!
-	return r != '>'
+	return unicode.IsLetter(r) || unicode.IsDigit(r)
+}
+
+func (p *HtmlParser) parseString() string {
+	if p.peek(0) != '"' {
+		return ""
+	}
+	p.expect('"')
+	value := p.consumeWhile(func(r rune) bool { return r != '"' })
+	p.expect('"')
+
+	const quote string = "\""
+	return quote + string(value) + quote
 }
 
 func (p *HtmlParser) parseElement() *dom.ElementNode {
 	p.expect('<')
 	name := p.consumeWhile(IsHtmlTagRune)
+	
+	attribs := dom.AttributeMap{}
+	for {
+		p.consumeWhile(func(r rune) bool { return r <= ' ' })
+		if p.peek(0) == '>' {
+			break
+		}
+
+		// this means that 
+		// <div this is my thingy    ="foo">
+		// would be a valid attribute...
+		// stored as "this is my thingy    "
+		// should we allow this?
+
+		attributeName := p.consumeWhile(func (r rune) bool {
+			return r != '='
+		})
+		p.expect('=')
+		attributeValue := p.parseString()
+		attribs[string(attributeName)] = attributeValue
+	}
+
 	p.expect('>')
 	
 	children := p.parseNodes()
@@ -110,7 +140,7 @@ func (p *HtmlParser) parseElement() *dom.ElementNode {
 	p.expect(name...)
 	p.expect('>')
 
-	return dom.NewElementNode(string(name), children)
+	return dom.NewElementNode(string(name), children, attribs)
 }
 
 func (p *HtmlParser) parseText() *dom.TextNode {
