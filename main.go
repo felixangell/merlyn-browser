@@ -12,7 +12,7 @@ func main() {
 	
 	fileBytes, err := ioutil.ReadFile("tests/simple_page.html")
     if err != nil {
-        fmt.Print(err)
+		fmt.Print(err)
     }
     
     htmlDOM := html.ParseHtml(string(fileBytes))
