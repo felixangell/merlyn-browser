@@ -20,6 +20,8 @@ package css
 // hm?
 // div.error
 // a.error
+// what about
+// * { } ... HM
 
 // h1
 // h1:first-child

@@ -14,5 +14,5 @@ func NewTextNode(value string) *TextNode {
 }
 
 func (t *TextNode) Info() string {
-	return fmt.Sprintf("t %s", t.value)
+	return fmt.Sprintf("t `%s`", t.value)
 }

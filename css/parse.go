@@ -1,9 +1,25 @@
 package css
 
 type CssParser struct {
-	pos uint
+	input []*Token
+	pos   uint
 }
 
-func ParseCss(cssCode string) *StyleSheet {
-	c := &CssParser{}
+func (c *CssParser) parseRule() *Rule {
+
+	return nil
+}
+
+func (c *CssParser) parseRules() []*Rule {
+	var rules []*Rule
+	return rules
+}
+
+func ParseCss(tokens []*Token) *StyleSheet {
+	c := &CssParser{
+		input: tokens,
+	}
+	return &StyleSheet{
+		rules: c.parseRules(),
+	}
 }
