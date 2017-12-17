@@ -1,3 +1,5 @@
+//go:generate stringer -type=TokenType
+
 package css
 
 type TokenType uint
@@ -6,16 +8,15 @@ const (
 	Identifier TokenType = iota
 	Number
 	String
-	Keyword
 	Symbol
 )
 
 type Token struct {
-	lexeme string
+	lexeme []rune
 	kind   TokenType
 }
 
-func NewToken(lexeme string, kind TokenType) *Token {
+func NewToken(lexeme []rune, kind TokenType) *Token {
 	return &Token{
 		lexeme: lexeme,
 		kind:   kind,

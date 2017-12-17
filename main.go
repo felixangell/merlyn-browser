@@ -24,5 +24,7 @@ func main() {
 	dom.TreePrinter(htmlDOM)
 
 	cssCode := readToString("tests/base.css")
-	css.ParseCss(css.TokenizeCss(cssCode))
+	tokens := css.TokenizeCss(cssCode)
+	css.TokenPrinter(tokens)
+	css.ParseCss(tokens)
 }

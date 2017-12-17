@@ -83,7 +83,7 @@ func (p *HtmlParser) consume() (rune, uint) {
 }
 
 func (p *HtmlParser) peek(offs uint) rune {
-	r, _ := utf8.DecodeRuneInString(p.input[p.pos:])
+	r, _ := utf8.DecodeRuneInString(p.input[p.pos+offs:])
 	if r == utf8.RuneError {
 		panic("oh dear!")
 	}
